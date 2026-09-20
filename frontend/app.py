@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import streamlit as st
 from api_client import APIClient
 
@@ -99,7 +100,11 @@ if "messages" not in st.session_state:
 
 # Sidebar: System Diagnostics & Settings
 with st.sidebar:
-    st.image("https://img.icons8.com/clouds/200/education.png", width=90)
+    logo_path = Path(__file__).parent / "assets" / "logo.jpg"
+    if logo_path.exists():
+        st.image(str(logo_path), width=85)
+    else:
+        st.markdown("# 📚")
     st.title("System Status")
     
     # Check backend health
