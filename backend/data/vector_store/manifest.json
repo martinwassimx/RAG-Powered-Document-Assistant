@@ -1,0 +1,9 @@
+{
+  "collection_name": "cs_course_documents",
+  "total_chunks": 45,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "embedding_dimension": 384,
+  "chunk_size": 800,
+  "chunk_overlap": 150,
+  "source_documents_count": 5
+}

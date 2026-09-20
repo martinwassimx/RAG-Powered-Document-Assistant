@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rag_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=RAG Document Assistant API
+      - APP_ENV=production
+      - DEBUG=False
+      - CHROMA_PATH=data/vector_store
+      - COLLECTION_NAME=cs_course_documents
+      - EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
+      # Connect to Ollama running on host machine
+      - OLLAMA_HOST=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3:latest
+      - TOP_K=4
+      - CORS_ORIGINS=http://localhost:8501,http://frontend:8501
+    volumes:
+      - ./backend/data/vector_store:/app/data/vector_store
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rag_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://backend:8000
+      - APP_TITLE=RAG Document Assistant
+      - DEFAULT_TOP_K=4
+    depends_on:
+      - backend
+    restart: unless-stopped
